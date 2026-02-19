@@ -1,99 +1,47 @@
-# Tech Context: Raijin Labs Documentation
+# Tech Context — LucidLayer Documentation
 
-## Technology Stack
-
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| Mintlify | Latest | Documentation platform |
-| MDX | - | Content format (Markdown + JSX) |
-| OpenAPI | 3.x | API spec format |
-| Git/GitHub | - | Version control + deployment trigger |
+## Technologies Used
+- **Mintlify** — Documentation platform (renders MDX, hosts site, provides search)
+- **MDX** — Markdown with JSX components for rich documentation
+- **GitHub Actions** — CI/CD for auto-syncing SDK docs
+- **Speakeasy** — SDK generation tool (generates TypeScript SDK + docs from OpenAPI)
+- **OpenAPI 3.x** — API specification format for auto-generated API reference
+- **Python scripts** — Build/sync automation (rebuild-sdk-docs.py, etc.)
 
 ## Development Setup
-
-### Prerequisites
-- Node.js (for Mintlify CLI)
-- Git
-
-### Commands
-
 ```bash
-# Install Mintlify CLI globally
-npm i -g mint
+# Clone the repo
+git clone https://github.com/raijinlabs/docs.git
+cd docs
 
-# Start local development server
-cd c:\docs
-mint dev
-# Preview at http://localhost:3000
+# Install Mintlify CLI (optional, for local preview)
+npm install -g mintlify
 
-# Update Mintlify CLI
-mint update
+# Start local dev server
+mintlify dev
+
+# Rebuild SDK docs manually
+python scripts/rebuild-sdk-docs.py
 ```
 
-### Configuration
-
+## Key Configuration Files
 | File | Purpose |
 |------|---------|
-| `docs.json` | Central config: navigation, theme, branding, footer |
-| `api-reference/openapi.json` | OpenAPI spec for auto-generated API docs |
-| `favicon.svg` | Browser tab icon |
-| `logo/light.svg` | Logo for light mode |
-| `logo/dark.svg` | Logo for dark mode |
+| `docs.json` | Mintlify config: navigation, theme, colors, logo, OpenAPI source |
+| `.github/workflows/sync-sdk-docs.yml` | CI workflow for auto-syncing SDK docs |
+| `scripts/rebuild-sdk-docs.py` | Python script to fetch + build SDK MDX pages |
 
-## Deployment
+## Dependencies
+- **External:** Mintlify hosting, GitHub, Speakeasy (via lucid-ai-sdk repo)
+- **Internal:** `raijinlabs/lucid-ai-sdk` (OpenAPI spec + Speakeasy docs source)
 
-| Target | Platform | Trigger |
-|--------|----------|---------|
-| Production | Mintlify CDN | Push to `main` branch |
-| Preview | Local | `mint dev` (localhost:3000) |
+## Technical Constraints
+- Mintlify has specific MDX component support (not all JSX works)
+- OpenAPI spec must be publicly accessible URL for API playground
+- Logo/images must be in repo (Mintlify serves from its S3, but relative paths work best)
+- Maximum ~200 pages before navigation becomes unwieldy
 
-### Mintlify Dashboard
-- GitHub app installed from [dashboard](https://dashboard.mintlify.com)
-- Auto-deploys on push to default branch
-- No manual build step required
-
-## Content Format
-
-### MDX Components Available
-- `<Card>` - Feature cards with icons
-- `<Columns>` - Multi-column layouts
-- `<Tabs>` - Tabbed content
-- `<Accordion>` - Collapsible sections
-- `<Snippet>` - Reusable content blocks
-- `<CodeGroup>` - Multi-language code blocks
-- `<Warning>` / `<Note>` / `<Tip>` - Callout blocks
-
-### Frontmatter
-Every `.mdx` file starts with YAML frontmatter:
-```yaml
----
-title: "Page Title"
-description: "SEO description"
-icon: "icon-name"  # Optional Mintlify icon
----
-```
-
-## Repository Info
-
-- **GitHub**: `raijinlabs/docs`
-- **Origin**: `https://github.com/raijinlabs/docs.git`
-- **Default Branch**: main
-- **License**: See LICENSE file
-
-## Related Repositories
-
-| Repo | Relationship |
-|------|-------------|
-| `LucidMerged` | Main platform (docs reference its APIs) |
-| `Lucid-L2` | AI backend (API docs generated from its OpenAPI spec) |
-| `lucid-plateform-core` | Core services (TrustGate API docs) |
-| `yaku-hub` | Additional services |
-
-## Code Style for Documentation
-
-- **File names**: `kebab-case.mdx`
-- **Titles**: Title Case
-- **Descriptions**: Sentence case
-- **Code blocks**: Always specify language
-- **Links**: Use relative paths within docs
-- **Images**: Store in `images/` directory
+## Repo Secrets
+| Secret | Repo | Purpose |
+|--------|------|---------|
+| `DOCS_SYNC_PAT` | `lucid-ai-sdk` | Cross-repo dispatch to trigger docs rebuild |

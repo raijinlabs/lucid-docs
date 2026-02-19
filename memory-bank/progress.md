@@ -1,92 +1,41 @@
-# Progress: Raijin Labs Documentation
+# Progress — LucidLayer Documentation
 
-## Current Status (February 2026)
+## What Works ✅
+- **Mintlify site:** Live, rendering 66 pages across 6 tabs
+- **Navigation:** Overview, Guides, API Reference, SDKs & Tools, Platform, Resources
+- **API Reference:** Auto-generated from OpenAPI spec in SDK repo
+- **SDK docs:** 8 pages rebuilt from Speakeasy sources (typescript, passports, inference, receipts, agents, python, rest, mcp-server)
+- **CI/CD:** GitHub Actions auto-sync SDK docs every 6 hours + instant dispatch
+- **Logo:** SVG logos (dark/light) with PNG favicon
+- **Theme:** Emerald green (#10B981) with dark mode support
+- **AI Tools section:** MCP integration guides for Cursor, Claude Code, Windsurf
 
-### Overall Progress: ~15% (Scaffolding Complete, Content Needed)
+## What's Left to Build 🔨
+- [ ] Flesh out AI tools page content (currently minimal setup instructions)
+- [ ] Python SDK documentation (when SDK is ready)
+- [ ] Webhook integration guide content
+- [ ] More code samples in API reference
+- [ ] Interactive playground/examples
+- [ ] Custom domain setup (if not already done)
+- [ ] Search optimization/custom snippets
+- [ ] Video tutorials/walkthroughs
+- [ ] Community/forum integration
 
----
-
-## What Works (Production-Ready)
-
-### Infrastructure
-- Mintlify project scaffolded and deployed
-- GitHub repo (`raijinlabs/docs`) connected to Mintlify dashboard
-- Auto-deploy pipeline active (push to main = live)
-- Local development working (`mint dev`)
-
-### Content Structure
-- Two-tab navigation (Guides + API Reference)
-- AI tools section (Cursor, Claude Code, Windsurf pages)
-- API endpoint examples (GET, POST, DELETE, Webhook)
-- Essential guides (Markdown, Code, Images, Navigation, Settings, Snippets)
-- OpenAPI spec integration working
-
-### Assets
-- Logo files (light/dark SVG)
-- Favicon
-- Hero images (light/dark)
-
----
-
-## What Needs Work
-
-### High Priority (P0) - Branding & Core Content
-
-| Task | Status | Notes |
-|------|--------|-------|
-| Customize docs.json for Raijin Labs | Not Started | Name, colors, logos, nav |
-| Replace index.mdx homepage | Not Started | Product overview, not starter kit |
-| Lucid-L2 API quickstart | Not Started | First API call guide |
-| Import real OpenAPI spec | Not Started | Replace placeholder spec |
-
-### Medium Priority (P1) - Product Documentation
-
-| Task | Status | Notes |
-|------|--------|-------|
-| LucidMerged platform guide | Not Started | Getting started, workspace setup |
-| OpenClaw integration guide | Not Started | Agent creation, channel setup |
-| Authentication docs | Not Started | Privy auth, API keys |
-| Webhook documentation | Not Started | Event types, payload formats |
-
-### Low Priority (P2) - Advanced Content
-
-| Task | Status | Notes |
-|------|--------|-------|
-| JavaScript SDK docs | Not Started | raijin-labs-lucid-ai package |
-| Python SDK docs | Not Started | If SDK exists |
-| Tutorials & how-tos | Not Started | Step-by-step guides |
-| Changelog section | Not Started | Release notes |
-
-### Future (P3)
-
-| Task | Status | Notes |
-|------|--------|-------|
-| Multi-language examples | Not Started | Python, Go, Ruby, etc. |
-| Interactive playground | Not Started | Try API in browser |
-| Community guides | Not Started | User-contributed content |
-| Video tutorials | Not Started | Embedded walkthroughs |
-
----
+## Current Status
+- **Phase:** Post-launch, content enrichment
+- **Pages:** 66 total MDX/MD files
+- **Auto-sync:** Operational (6h schedule + instant cross-repo dispatch)
+- **Last major update:** Feb 19, 2026 (Sprint 2-4, SDK rebuild, CI/CD, logo fix)
 
 ## Known Issues
+- ~~Logo PNG returning 403 on Mintlify S3~~ → Fixed: switched to SVG logos
+- AI tools pages reference `@lucidlayer/mcp-server` which may not be published yet
+- Some guide pages may have placeholder content from batch generation
 
-1. **All content is starter kit defaults** - Every page needs to be replaced with actual product content
-2. **docs.json branding** - Still says "Mint Starter Kit" with Mintlify colors
-3. **OpenAPI spec is placeholder** - Needs real Lucid-L2 API spec
-4. **No product-specific images** - Only starter kit hero images
-
----
-
-## Summary
-
-**Infrastructure: 100%** - Mintlify is fully set up and deploying
-**Branding: 0%** - Still using starter kit defaults
-**Core Content: 0%** - No product-specific documentation yet
-**API Reference: 5%** - Structure exists but placeholder spec
-**Advanced Content: 0%** - SDKs, tutorials, changelog not started
-
-**Estimated Timeline to MVP:**
-- 1 day: Branding + homepage customization
-- 3 days: Core API docs (Lucid-L2 quickstart + OpenAPI spec)
-- 1 week: Platform guides (LucidMerged, OpenClaw)
-- 2 weeks: Full documentation MVP
+## Evolution of Decisions
+1. **Initial setup** — Started with basic Mintlify template + docs.json
+2. **Sprint 1** — Core pages (quickstart, auth, SDK installation)
+3. **Sprint 2-4** — Bulk page generation (40+ pages via Python scripts)
+4. **SDK rebuild** — Switched from template SDK pages to Speakeasy-sourced content
+5. **CI/CD** — Added auto-sync pipeline for continuous SDK doc freshness
+6. **Logo fix** — PNG → SVG to avoid Mintlify S3 access issues
