@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "aspen",
   "name": "Lucid Documentation",
   "colors": {
     "primary": "#6366F1",
@@ -9,8 +9,8 @@
   },
   "favicon": "/logo/lucid_w.png",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/images/CopyofCopyofCopyofCopyofCopyofCopyofCopyofMiyokaDeckv1(3).png",
+    "dark": "/images/CopyofCopyofCopyofCopyofCopyofCopyofCopyofMiyokaDeckv1(2).png"
   },
   "navigation": {
     "tabs": [
@@ -189,5 +189,8 @@
       "x": "https://x.com/LucidChain",
       "github": "https://github.com/raijinlabs/lucid-ai-sdk"
     }
+  },
+  "fonts": {
+    "family": "Montserrat"
   }
 }
