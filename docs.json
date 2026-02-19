@@ -7,10 +7,10 @@
     "light": "#818CF8",
     "dark": "#4F46E5"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/lucid_w.png",
   "logo": {
-    "light": "/logo/lucid_w.png",
-    "dark": "/logo/lucid_w.png"
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
   },
   "navigation": {
     "tabs": [
