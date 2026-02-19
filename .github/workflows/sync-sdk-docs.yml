@@ -1,0 +1,45 @@
+name: Sync SDK Docs from Speakeasy
+
+on:
+  # Triggered by SDK repo via repository_dispatch
+  repository_dispatch:
+    types: [sdk-updated]
+  
+  # Manual trigger
+  workflow_dispatch:
+  
+  # Weekly sync as fallback
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6 AM UTC
+
+jobs:
+  sync-sdk-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout docs repo
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Run SDK docs rebuild
+        run: python scripts/rebuild-sdk-docs.py
+      
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sdks/
+          git commit -m "docs: auto-sync SDK docs from Speakeasy [skip ci]"
+          git push
