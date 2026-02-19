@@ -113,15 +113,6 @@
               "sdks/python",
               "sdks/rest"
             ]
-          },
-          {
-            "group": "AI Tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf",
-              "sdks/mcp-server"
-            ]
           }
         ]
       },
