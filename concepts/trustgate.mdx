@@ -1,0 +1,74 @@
+---
+title: "TrustGate"
+description: "OpenAI-compatible LLM proxy with policy-based routing"
+---
+
+# TrustGate
+
+**TrustGate** is an OpenAI-compatible API proxy that routes inference requests to the optimal LLM provider based on passport policies.
+
+## How It Works
+
+```
+Client → TrustGate (:4010) → Passport Matching → LLM Provider → Receipt
+```
+
+1. Your app sends a standard OpenAI `POST /v1/chat/completions` request
+2. TrustGate matches the request against **passport policies** (model, cost, latency, capabilities)
+3. The best-fit provider is selected and the request is forwarded
+4. A **cryptographic receipt** is generated for every inference
+5. Receipts are batched into **epochs** and anchored on Solana
+
+## OpenAI Compatibility
+
+TrustGate implements the OpenAI Chat Completions API. Any OpenAI SDK works — just change the base URL:
+
+```typescript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: "your-lucid-api-key",
+  baseURL: "https://api.lucid.foundation/v1",
+});
+
+const response = await client.chat.completions.create({
+  model: "gpt-4o",  // or any passport ID
+  messages: [{ role: "user", content: "Hello!" }],
+});
+```
+
+## Passport Routing
+
+Instead of hardcoding a model, you can specify passport requirements and let TrustGate find the best match:
+
+```typescript
+const response = await lucid.inference.run({
+  passportId: "your-passport-id",
+  messages: [{ role: "user", content: "Analyze this data" }],
+});
+```
+
+Passport matching considers:
+- **Model capabilities** — vision, function calling, code generation
+- **Cost constraints** — max price per million tokens
+- **Latency requirements** — time-to-first-token targets
+- **Provider preferences** — specific providers or exclusions
+
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| **Multi-provider** | OpenAI, Anthropic, Google, Mistral, open-source via LiteLLM |
+| **Streaming** | SSE streaming with receipt generation |
+| **Quota enforcement** | Per-org, per-key rate limits and token budgets |
+| **Metering** | Real-time usage tracking via OpenMeter |
+| **Receipt signing** | Ed25519 signatures on every inference |
+| **Epoch batching** | Receipts batched and anchored on Solana |
+
+## Architecture
+
+TrustGate is part of `lucid-plateform-core`, running as a Fastify service on port 4010. It depends on:
+- **LiteLLM** — unified LLM provider interface
+- **@raijinlabs/passport** — passport matching engine
+- **Supabase** — receipt and quota storage
+- **OpenMeter** — usage metering

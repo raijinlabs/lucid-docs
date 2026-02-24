@@ -40,6 +40,13 @@
             ]
           },
           {
+            "group": "Gateway",
+            "pages": [
+              "concepts/trustgate",
+              "concepts/mcpgate"
+            ]
+          },
+          {
             "group": "Architecture",
             "pages": [
               "architecture",
@@ -111,7 +118,8 @@
               "sdks/typescript-receipts",
               "sdks/typescript-agents",
               "sdks/python",
-              "sdks/rest"
+              "sdks/rest",
+              "sdks/mcp-server"
             ]
           }
         ]

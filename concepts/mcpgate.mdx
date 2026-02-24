@@ -1,0 +1,116 @@
+---
+title: "MCPGate"
+description: "MCP tool gateway with 88+ builtin servers"
+---
+
+# MCPGate
+
+**MCPGate** is an open-source tool gateway that exposes 88+ services as [MCP (Model Context Protocol)](https://modelcontextprotocol.io) servers. AI agents use MCPGate to discover and invoke tools across SaaS platforms, blockchains, and APIs.
+
+## How It Works
+
+```
+AI Agent → MCPGate (:4020) → Credential Adapter → Target Service
+```
+
+1. An agent searches for tools using **semantic discovery** (TF-IDF across 1000+ tools)
+2. MCPGate resolves credentials via the **CredentialAdapter** chain
+3. The tool call is routed to the target MCP server
+4. Results are returned with audit logging and metering
+
+## Builtin Servers
+
+88+ MCP server integrations across domains:
+
+| Category | Examples |
+|----------|---------|
+| **Finance / Crypto** | Binance, Coinbase, Jupiter, Uniswap, Aave, DeFiLlama, Polymarket |
+| **Collaboration** | Slack, Discord, Notion, Jira, Linear, Asana, Monday, Trello |
+| **Google Suite** | Drive, Docs, Sheets, Calendar, Gmail |
+| **DevOps** | GitHub, GitLab, Vercel, Railway |
+| **Communication** | Telegram, Microsoft Teams |
+
+## Credential Management
+
+MCPGate uses pluggable **CredentialAdapters** to manage service credentials:
+
+| Adapter | Description |
+|---------|-------------|
+| **EnvVarAdapter** | Read tokens from environment variables |
+| **DatabaseAdapter** | AES-256-GCM encrypted credential store in Postgres |
+| **CompositeAdapter** | Chain multiple adapters with fallback priority |
+
+```typescript
+// Example: composite adapter with env fallback
+const adapter = new CompositeAdapter([
+  new DatabaseAdapter(db, encryptionKey),
+  new EnvVarAdapter(),
+]);
+
+const token = await adapter.getToken("github", agentId);
+```
+
+## Session Budgets
+
+Cap agent resource usage per session:
+
+```typescript
+const session = await mcpgate.sessions.create({
+  agentId: "agent-123",
+  budget: {
+    maxToolCalls: 50,
+    maxCostUsd: 1.00,
+    maxDurationMs: 300000,  // 5 minutes
+    enforcement: "hard",     // reject calls over budget
+  },
+});
+```
+
+## Tool Discovery
+
+Find tools using natural language:
+
+```
+GET /tools/search?q=send+slack+message
+```
+
+Returns ranked results using TF-IDF semantic matching across all registered servers and tools.
+
+## Chain Execution
+
+Execute multi-step tool chains as a DAG:
+
+```typescript
+const result = await mcpgate.chains.execute({
+  steps: [
+    { id: "fetch", tool: "github.get_issue", params: { number: 42 } },
+    { id: "notify", tool: "slack.post_message", params: {
+      channel: "#eng",
+      text: "Issue #42: {{fetch.title}} — {{fetch.status}}"
+    }},
+  ],
+});
+```
+
+Variable interpolation (`{{step.field}}`) connects steps automatically.
+
+## Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **88+ servers** | Pre-built integrations for major platforms |
+| **Semantic search** | TF-IDF discovery across 1000+ tools |
+| **Session budgets** | Hard/soft caps on tool calls, cost, duration |
+| **Circuit breaker** | Automatic fault isolation for unhealthy servers |
+| **Audit logging** | Every tool call logged with identity and latency |
+| **Rate limiting** | Per-agent, per-server, or global limits |
+| **RBAC** | Scope-based access control per agent/plugin |
+| **Chain executor** | DAG-based multi-step tool chains |
+
+## Open Source
+
+MCPGate is available as a standalone open-source project under the MIT license:
+
+- **Repository**: [github.com/raijinlabs/mcpgate](https://github.com/raijinlabs/mcpgate)
+- **Docker**: `docker build -t mcpgate . && docker run -p 4020:4020 mcpgate`
+- **Self-hosting guide**: [Self-Hosting](/guides/self-hosting)
